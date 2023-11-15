@@ -45,8 +45,8 @@ export default async function Id({ params }) {
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Application History</h3>
                 <div className="bg-green-50 mb-4">
                 {
-                  data?.applicationHistory?.applications?.map((ele) =>(
-                    <>
+                  data?.applicationHistory?.applications?.map((ele, index) =>(
+                    <div key={index}>
                       <div className='px-3 flex justify-between my-1 '>
 
                         <h2 className='font-semibold'>Country: </h2>
@@ -83,7 +83,7 @@ export default async function Id({ params }) {
                         <p>{ele.reason ? ele.reason : '-'}</p>
                       </div>
                       <hr />
-                    </>
+                    </div>
                   ))
                 }
                 </div>
@@ -94,8 +94,8 @@ export default async function Id({ params }) {
               <div>
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Travel History</h3>
                 {
-                data?.travelDetails?.map((ele) =>(
-                  <>
+                data?.travelDetails?.map((ele, index) =>(
+                  <div key={index}>
                         <div className='px-3 flex justify-between my-1 '>
                           <h2 className='font-semibold'>Country: </h2>
                           <p>{ele.country}</p>
@@ -116,7 +116,7 @@ export default async function Id({ params }) {
                           <p>{ele.to}</p>
                         </div>
                         <hr />
-                  </>
+                  </div>
                 ))
                 }
               </div>
@@ -124,8 +124,8 @@ export default async function Id({ params }) {
               <div>
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Education</h3>
                 {
-                data?.education?.map((ele) =>(
-                  <>
+                data?.education?.map((ele, index) =>(
+                  <div key={index}>
                         <div className='px-3 flex justify-between my-1 '>
                           <h2 className='font-semibold'>Institution: </h2>
                           <p>{ele.school}</p>
@@ -152,7 +152,7 @@ export default async function Id({ params }) {
                         </div>
                       <hr />
                   
-                  </>
+                  </div>
                 ))
                 }
               </div>
@@ -160,8 +160,8 @@ export default async function Id({ params }) {
               <div>
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Occupation</h3>
                 {
-                data?.jobs?.map((ele) =>(
-                  <>
+                data?.jobs?.map((ele, index) =>(
+                  <div key={index}>
                         <div className='px-3 flex justify-between my-1 '>
                           <h2 className='font-semibold'>Company: </h2>
                           <p>{ele.company}</p>
@@ -193,7 +193,7 @@ export default async function Id({ params }) {
                         </div>
 
                    <hr/>
-                  </>
+                  </div>
                 ))
                 }
               </div>
@@ -332,7 +332,7 @@ export default async function Id({ params }) {
                   {
                     data?.files?.map((ele, index) => {
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
-                            return (<a key={index} className="flex-1 w-full" href={ele.url} download><Image src={ele.url} width={300} alt="server stuff"/></a>)
+                            return (<a key={index} className="flex-1 w-full" href={ele.url} download><Image src={ele.url} width={300} alt=""/></a>)
                         }else{
                             return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} style={{width: 'auto'}} height={300} type='application/pdf' /></a>)
                         }
