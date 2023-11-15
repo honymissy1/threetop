@@ -1,4 +1,5 @@
 import { db } from "../../firebaseConfig";
+import Link from "next/link";
 
 import '../globals.css';
 import { collection, doc, query, where, getDoc } from 'firebase/firestore';
@@ -24,7 +25,7 @@ export default async function Id({ params }) {
   return (
     <main className='p-1 md:p-10 bg-slate-600'>
       <div style={{position: 'absolute', top: '10px', left: '10px', color:'white', fontSize: '20px'}}>
-         <a href="/">&#8592;</a>
+        <Link href={"/"}>&#8592;</Link> 
       </div>
        <h1 className='text-4xl text-center mb-10 font-bold text-white'>{data?.fullName}</h1>
 
@@ -335,12 +336,12 @@ export default async function Id({ params }) {
                   {
                     data?.files?.map((ele, index) =>{
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
-                            return (<a key={index} className="flex-1" href={ele.url} download><Image src={ele.url} width={300} alt="This is an image from the server"/></a>)
+                            return (<a key={index} href={ele.url} download><Image src={ele.url} alt="This is an image from the server"/></a>)
                         }else if(ele.ext === 'pdf'){
-                            return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} width={300} height={300} type='application/pdf' /></a>)
+                            return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} height={300} type='application/pdf' /></a>)
                         }else{
                           <a key={index} className="flex-1" href={ele.url} download>
-                            <iframe src={ele.url} width={300} height={300}></iframe>
+                            <iframe src={ele.url} height={300}></iframe>
                           </a>
                         }
 
