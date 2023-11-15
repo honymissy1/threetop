@@ -23,6 +23,9 @@ export default async function Id({ params }) {
      const data = await getData(params.id);
   return (
     <main className='p-1 md:p-10 bg-slate-600'>
+      <div>
+         <a href="/">&#8592;</a>
+      </div>
        <h1 className='text-4xl text-center mb-10 font-bold text-white'>{data?.fullName}</h1>
 
        <div className="container mx-auto flex flex-col justify-center align-middle gap-10 h-auto sm:flex-row sm:w-full">
@@ -328,15 +331,27 @@ export default async function Id({ params }) {
               </div>
 
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Files</h3>
-              <div className='flex flex-wrap gap-5'>
+              <div className='grid grid-cols-3 gap-3'>
                   {
-                    data?.files?.map((ele, index) => {
-                        if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
-                            return (<a key={index} className="flex-1 w-full" href={ele.url} download><Image src={ele.url} width={300} alt=""/></a>)
-                        }else{
-                            return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} style={{width: 'auto'}} height={300} type='application/pdf' /></a>)
-                        }
-                    })
+                    data?.files?.map((ele, index) =>(
+                      <object key={index} data={ele.url} type={"application/octet-stream"}>
+                        Your browser does not support embedded files, but you can download it
+                        <a href={ele.url}>here</a>.
+                      </object>
+                     )
+                    //  {
+                        // if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
+                        //     return (<a key={index} className="flex-1" href={ele.url} download><Image src={ele.url} width={300} alt="This is an image from the server"/></a>)
+                        // }else if(ele.ext === 'pdf'){
+                        //     return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} width={300} height={300} type='application/pdf' /></a>)
+                        // }else{
+                        //   <a key={index} className="flex-1" href={ele.url} download>
+                        //     <iframe src={ele.url} width={300} height={300}></iframe>
+                        //   </a>
+                        // }
+
+                    // }
+                    )
                   }
               </div>
 
