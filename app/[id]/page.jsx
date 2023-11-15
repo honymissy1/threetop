@@ -23,7 +23,7 @@ export default async function Id({ params }) {
      const data = await getData(params.id);
   return (
     <main className='p-1 md:p-10 bg-slate-600'>
-      <div>
+      <div style={{position: 'absolute', top: '10px', left: '10px', color:'white', fontSize: '20px'}}>
          <a href="/">&#8592;</a>
       </div>
        <h1 className='text-4xl text-center mb-10 font-bold text-white'>{data?.fullName}</h1>
