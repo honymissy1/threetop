@@ -237,19 +237,20 @@ export default async function Id({ params }) {
                         {
                           data?.family?.divorceDate && (
                             <div className='px-3 flex justify-between my-1 '>
-                              <h2 className='font-semibold'>Marriage Date: </h2>
+                              <h2 className='font-semibold'>Divorce Date: </h2>
                               <p>{data?.family.divorceDate}</p>
                             </div>
                           )
                         }
-
+<br /> 
                         {
-                          data?.childDetail?.map(ele =>(
-                            <div>
-                              <h3 className='p-5 text-sm bg-green-200 font-bold'>Children</h3>
+                          data?.childDetail?.map((ele, index) =>(
+                            <div key={index}>
+
                               {
                                 data?.childDetail.length > 0 && (
                                   <>
+                                     <h2 className="bg-blue-300 text-black rounded p-1">Child ({index+ 1})</h2>
                                     <div className='px-3 flex justify-between my-1 '>
                                       <h2 className='font-semibold'>Name: </h2>
                                       <p>{ele.childName}</p>
@@ -264,12 +265,6 @@ export default async function Id({ params }) {
                                       <h2 className='font-semibold'>Date of Birth: </h2>
                                       <p>{ele.childDob}</p>
                                     </div>
-
-                                    <div className='px-3 flex justify-between my-1 '>
-                                      <h2 className='font-semibold'>Address: </h2>
-                                      <p>{data?.family.father.address}</p>
-                                    </div>
-
                                     <hr />
                                   </>
                                   
@@ -335,11 +330,11 @@ export default async function Id({ params }) {
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Files</h3>
               <div className='flex flex-wrap gap-5'>
                   {
-                    data?.files?.map(ele => {
+                    data?.files?.map((ele, index) => {
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
-                            return (<a className="flex-1 w-full" href={ele.url} download><Image src={ele.url} width={300} /></a>)
+                            return (<a key={index} className="flex-1 w-full" href={ele.url} download><Image src={ele.url} width={300} alt="server stuff"/></a>)
                         }else{
-                            return (<a className="flex-1" href={ele.url} download><embed src={ele.url} style={{width: 'auto'}} height={300} type='application/pdf' /></a>)
+                            return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} style={{width: 'auto'}} height={300} type='application/pdf' /></a>)
                         }
                     })
                   }
