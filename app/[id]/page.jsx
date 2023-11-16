@@ -332,17 +332,30 @@ export default async function Id({ params }) {
               </div>
 
                 <h3 className='p-5 text-sm bg-green-200 font-bold'>Files</h3>
-              <div className='grid grid-cols-3 gap-3'>
+              <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>              
                   {
                     data?.files?.map((ele, index) =>{
-                        if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg') {
-                            return (<a key={index} href={ele.url} download><Image src={ele.url} style={{width: '100%'}} alt="This is an image from the server"/></a>)
+                        if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg' || ele.ext === 'webp') {
+                            return (
+                                    <a key={index} href={ele.url} style={{width: "100%", border: '1px solid'}} download>
+                                      <img style={{width:"100%"}} src={ele.url} alt="This is an image from the server"/>
+                                    </a>
+                                  )
                         }else{
-                            return (<a key={index} className="flex-1" href={ele.url} download><embed src={ele.url} height={300} type='application/pdf' /></a>)
+                            return (
+                                    <a key={index} style={{width: "100%", border: '1px solid'}} className="flex-1" href={ele.url} download>
+                                       <embed 
+                                           style={{width: "100%"}}
+                                           src={ele.url} 
+                                           height={300} type='application/pdf'
+                                       />
+                                    </a>
+                                  )
                         }
 
                     })
                   }
+                
               </div>
 
             </div>

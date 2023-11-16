@@ -37,7 +37,7 @@ export default async function Home() {
                           <p><span className="font-bold">Passport Number:</span> {ele?.data().passportNumber} </p>
                           <p><span className="font-bold">Date Of Birth:</span> {ele?.data().dob}</p>
                         </div>
-                        <span className="text-end text-sm text-purple-900">3 Minutes Ago</span>
+                        {/* <span className="text-end text-sm text-purple-900">3 Minutes Ago</span> */}
                       </div>
                     </Link>
                     ))
