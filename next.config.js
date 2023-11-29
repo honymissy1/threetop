@@ -5,7 +5,8 @@ const nextConfig = {
     ...withPWA({
       dest: "public",
       register: true,
-      skipWaiting: true
+      skipWaiting: true,
+      sw: 'service-worker.js',
     })
 }
 
