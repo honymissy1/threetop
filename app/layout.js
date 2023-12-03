@@ -7,7 +7,8 @@ export const metadata = {
   title: '3Top Ecclesia',
   description: 'Threetop Travels Site',
   manifest: '/manifest.json',
-  icons: {apple: '/icon512_maskable.png'}
+  icons: {apple: '/icon512_maskable.png'},
+  link: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
 }
 
 export default function RootLayout({ children }) {
