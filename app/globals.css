@@ -26,15 +26,10 @@ body {
   color: rgb(var(--foreground-rgb));
   background-repeat: no-repeat;
   height: auto
-  /* background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
 }
 
 
-a:active{
-  background-color: red;
+.active{
+  background-color: green;
+  color: white;
 }

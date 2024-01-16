@@ -1,347 +1,226 @@
-import { db } from "../../firebaseConfig";
-import Link from "next/link";
-
-import '../globals.css';
-import { collection, doc, query, where, getDoc } from 'firebase/firestore';
-import { Image } from 'antd';
+"use client"
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig"; 
 
 
-export async function getData(x) {
-  let data = [];
 
-  const docRef = doc(db, 'users', x);
-  const docSnap = await getDoc(docRef);
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-  if (docSnap.exists()) {
-    return docSnap.data()
-  }
+const User = ({id}) =>{
+  const param = useParams();
+  const [data, setData] = useState();
 
-  return data
-}
+    useEffect(() =>{
+      const fetchData = async () => {
+        const docRef = doc(db, "users", param.id);
 
+        const docSnap = await getDoc(docRef);
 
-export default async function Id({ params }) {
-     const data = await getData(params.id);
-  return (
-    <main className='p-1 md:p-10 bg-slate-600'>
-      <div style={{position: 'absolute', top: '10px', left: '10px', color:'white', fontSize: '20px'}}>
-        <Link href={"/"}>&#8592;</Link> 
-      </div>
-       <h1 className='text-4xl text-center mb-10 font-bold text-white'>{data?.fullName}</h1>
+       if (docSnap.exists()) {
+          const data = docSnap.data();
+          setData(data);
+      }
+    }
+      fetchData()
 
-       <div className="container mx-auto flex flex-col justify-center align-middle gap-10 h-auto sm:flex-row sm:w-full">
-            <div style={{minWidth: '250px'}} className='bg-white w-full shadow rounded-md overflow-hidden sm:w-1/3 h-fit sm:sticky top-10'>
-                <p className='bg-green-300 text-white p-1 text-center'>Personal Info</p>
-                <div className='p-3'>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Passport Number:</span> {data?.passportNumber}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Issue Date:</span> {data?.issueDate}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Expiry Date:</span> {data?.expiryDate}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Phone Number:</span> {data?.phone}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Date of Birth:</span> {data?.dob}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Gender:</span> {data?.gender}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>City of Birth:</span> {data?.cityOfBirth}</p>
-                    <p className='text-sm mb-1'><span className='font-semibold'>Address:</span> {data?.address}</p>
-                </div>
-            </div>
-
-            <div className='flex-auto bg-green-100 rounded overflow-hidden h-auto'>
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Application History</h3>
-                <div className="bg-green-50 mb-4">
-                {
-                  data?.applicationHistory?.applications?.map((ele, index) =>(
-                    <div key={index}>
-                      <div className='px-3 flex justify-between my-1 '>
-
-                        <h2 className='font-semibold'>Country: </h2>
-                        <p>{ele.country}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Date of Application: </h2>
-                        <p>{ele.dateOfApplication}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Status </h2>
-                        <p>{ele.status}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Issue Date </h2>
-                        <p>{ele.issueDate ? ele.issueDate : '-'}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Expiry Date </h2>
-                        <p>{ele.expiryDate ? ele.expiryDate : '-'}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Denial Date </h2>
-                        <p>{ele.denialDate ? ele.denialDate : '-'}</p>
-                      </div>
-
-                      <div className='px-3 flex justify-between my-1'>
-                        <h2 className='font-semibold'>Reason for Denial </h2>
-                        <p>{ele.reason ? ele.reason : '-'}</p>
-                      </div>
-                      <hr />
-                    </div>
-                  ))
-                }
+    }, [])
+    return(
+        <>
+            <div className="hidden md:block flex-1 h-auto w-2/3 shadow p-6 overflow-x-hidden">
+                <h3 className="text-slate-800 font-semibold text-center text-3xl">{data?.fullName}</h3>
+               
+                <div className="info mb-3 text-slate-800 bg-slate-200 p-2">
+                  <h3 className="text-center font-bold text-green-950">PERSONAL INFO</h3>
+                  <p>Passport Number: <span className="font-bold">{data?.passportNumber}</span></p>
+                  <p>Issue Date: <span className="font-bold">{data?.issueDate}</span></p> 
+                  <p>Expiry Date: <span className="font-bold">{data?.expiryDate}</span></p>
+                  <p>Phone: <span className="font-bold">{data?.phone}</span></p>
+                  <p>Date of Birth: <span className="font-bold">{data?.dob}</span></p> 
+                  <p>City of Birth: <span className="font-bold">{data?.cityOfBirth}</span></p>
+                  <p>Address: <span className="font-bold">{data?.address}</span></p>
                 </div>
 
-
-              </div>
-
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Travel History</h3>
-                {
-                data?.travelDetails?.map((ele, index) =>(
-                  <div key={index}>
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Country: </h2>
-                          <p>{ele.country}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Purpose of Travel: </h2>
-                          <p>{ele.purpose}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>From </h2>
-                          <p>{ele.from}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>To </h2>
-                          <p>{ele.to}</p>
-                        </div>
-                        <hr />
-                  </div>
-                ))
-                }
-              </div>
-
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Education</h3>
-                {
-                data?.education?.map((ele, index) =>(
-                  <div key={index}>
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Institution: </h2>
-                          <p>{ele.school}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Certification: </h2>
-                          <p>{ele.certification}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Course </h2>
-                          <p>{ele.course ? ele.course : '-'}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>From </h2>
-                          <p>{ele.from}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>To </h2>
-                          <p>{ele.to}</p>
-                        </div>
-                      <hr />
-                  
-                  </div>
-                ))
-                }
-              </div>
-
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Occupation</h3>
-                {
-                data?.jobs?.map((ele, index) =>(
-                  <div key={index}>
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Company: </h2>
-                          <p>{ele.company}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Position: </h2>
-                          <p>{ele.position}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Job Description </h2>
-                          <p>{ele.jobTitle}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>From </h2>
-                          <p>{ele.from}</p>
-                        </div>
-
-                        <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>To </h2>
-                          <p>{ele.to}</p>
-                        </div>
-
-                          <div className='px-3 flex justify-between my-1'>
-                          <h2 className='font-semibold'>Address </h2>
-                          <p>{ele.address}</p>
-                        </div>
-
-                   <hr/>
-                  </div>
-                ))
-                }
-              </div>
-
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Family</h3>
-
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Marital Status: </h2>
-                          <p>{data?.family?.maritalStatus}</p>
-                        </div>
-
+                <div className="info text-slate-800 text-sm mb-5 bg-slate-100 p-3 min-h-[100px]">
+                  <h3 className="text-center font-bold text-green-950">APPLICATION HISTORY</h3>
+                  {
+                    data?.applicationHistory?.applications.length > 0 ? (
+                      <div className="flex justify-between gap-5">
                         {
-                          data?.family?.spouseName && (
-                            <div className='px-3 flex justify-between my-1 '>
-                              <h2 className='font-semibold'>Spouse Name: </h2>
-                              <p>{data?.family?.spouseName}</p>
+                          data?.applicationHistory?.applications.map((ele, index) =>(
+                            <div className="mb-3 w-1/2 bg-slate-50" key={ele.id}>
+                               <p className="bg-green-200 w-max p-1 text-xs">Application {index+1}</p>
+                               <div className="p-3">
+                                  <p>Country: <span className="font-bold">{ele?.country}</span></p> 
+                                  <p>Application Date: <span className="font-bold">{ele?.dateOfApplication}</span></p> 
+                                  <p>Status {ele?.status == "Denied" ? (<span className="w-max rounded p-0.5 bg-red-600">{ele?.status}</span>): (<span className="w-max rounded p-0.5 bg-green-600">{ele?.status}</span>)}</p>
+                                  {
+                                    ele?.issueDate ? (<p>Issue Date: <span className="font-bold">{ele?.issueDate}</span></p>):
+                                    (<></>)
+                                  }
+                                  {
+                                    ele?.expiryDate ? (<p>Expiry Date: <span className="font-bold">{ele?.expiryDate}</span></p>):
+                                    (<></>)
+                                  }
+                                
+                                  {
+                                    ele?.denialDate ? (<p>Denial Date: <span className="font-bold">{ele?.denialDate}</span></p>):
+                                    (<></>)
+                                  }
+
+                                {
+                                    ele?.reason ? (<p>Reason: <span className="font-bold">{ele?.reason}</span></p>):
+                                    (<></>)
+                                  }
+
+
+                               </div>
+
                             </div>
-                          )
-                        }
-
-                        {
-                          data?.family?.spouseDob && (
-                            <div className='px-3 flex justify-between my-1 '>
-                              <h2 className='font-semibold'>Spouse Dob: </h2>
-                              <p>{data?.family?.spouseDob}</p>
-                            </div>
-                          )
-                        }
-
-                        {
-                          data?.family?.marriageDate && (
-                            <div className='px-3 flex justify-between my-1 '>
-                              <h2 className='font-semibold'>Marriage Date: </h2>
-                              <p>{data?.family.marriageDate}</p>
-                            </div>
-                          )
-                        }
-
-
-                        {
-                          data?.family?.divorceDate && (
-                            <div className='px-3 flex justify-between my-1 '>
-                              <h2 className='font-semibold'>Divorce Date: </h2>
-                              <p>{data?.family.divorceDate}</p>
-                            </div>
-                          )
-                        }
-<br /> 
-                        {
-                          data?.childDetail?.map((ele, index) =>(
-                            <div key={index}>
-
-                              {
-                                data?.childDetail.length > 0 && (
-                                  <>
-                                     <h2 className="bg-blue-300 text-black rounded p-1">Child ({index+ 1})</h2>
-                                    <div className='px-3 flex justify-between my-1 '>
-                                      <h2 className='font-semibold'>Name: </h2>
-                                      <p>{ele.childName}</p>
-                                    </div>
-
-                                    <div className='px-3 flex justify-between my-1 '>
-                                      <h2 className='font-semibold'>Gender: </h2>
-                                      <p>{ele.childGender}</p>
-                                    </div>
-
-                                    <div className='px-3 flex justify-between my-1 '>
-                                      <h2 className='font-semibold'>Date of Birth: </h2>
-                                      <p>{ele.childDob}</p>
-                                    </div>
-                                    <hr />
-                                  </>
-                                  
-                                )
-                              }
-
-                          </div>
                           ))
                         }
 
+                      </div>
+                    ):(
+                      <h1 className="text-center">No Previous Applications</h1>
+                    )
+                  }
+                  
+                </div>
 
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Parent Info (Father)</h3>
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Name: </h2>
-                          <p>{data?.family?.father?.name}</p>
-                        </div>
+                <div className="info text-sm text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                  <h3 className="text-center font-bold text-green-950">TRAVEL HISTORY</h3>
+                  {
+                    data?.travelDetails.length > 0 ? (
+                      <div className="flex justify-between gap-5">
+                        {
+                          data?.travelDetails.map((ele, index) =>(
+                            <div className="mb-3 w-1/2 bg-slate-50" key={ele.id}>
+                               <p className="bg-green-200 w-max p-1 text-xs">Travel {index+1}</p>
+                               <div className="p-2">
+                                <p>Country: <span className="font-bold">{ele?.country}</span></p> 
+                                <p>Purpose: <span className="font-bold">{ele?.purpose}</span></p> 
+                                <p>From: <span className="font-bold">{ele?.from}</span></p> 
+                                <p>To: <span className="font-bold">{ele?.to}</span></p> 
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Date of Birth: </h2>
-                          <p>{data?.family?.father?.dateOfBirth}</p>
-                        </div>
+                               </div>
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Occupation: </h2>
-                          <p>{data?.family?.father?.occupation}</p>
-                        </div>
+                            </div>
+                          ))
+                        }
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Address: </h2>
-                          <p>{data?.family?.father?.address}</p>
-                        </div>
+                      </div>
+                    ):(
+                      <h1 className="text-center">No Previous Travel</h1>
+                    )
+                  }
+                  
+                </div>
+
+                <div className="info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                  <h3 className="text-center font-bold text-green-950">WORK HISTORY</h3>
+                  {
+                    data?.jobs.length > 0 ? (
+                      <div className="flex justify-between gap-5">
+                        {
+                          data?.jobs.map((ele, index) =>(
+                            <div className="mb-3 w-1/2 bg-slate-50" key={ele.id}>
+                               <p className="bg-green-200 w-max p-1 text-xs">WORK {index+1}</p>
+                               <div className="p-2">
+                                <p>Company: <span className="font-bold">{ele?.company}</span></p> 
+                                <p>Job Title: <span className="font-bold">{ele?.jobTitle}</span></p> 
+                                <p>Position: <span className="font-bold">{ele?.position}</span></p> 
+                                <p>From: <span className="font-bold">{ele?.from}</span></p> 
+                                <p>To: <span className="font-bold">{ele?.to}</span></p> 
+                                <p>Address: <span className="font-bold">{ele?.address}</span></p> 
+                               </div>
+                            </div>
+                          ))
+                        }
+
+                      </div>
+                    ):(
+                      <h1 className="text-center">No Previous Work Data</h1>
+                    )
+                  }
+                  
+                </div>
 
 
-              </div>
+                <div className="info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                  <h3 className="text-center font-bold text-green-950">FAMILY</h3>
+                  
+                  <p>Marital Status: <span className="font-bold">{data?.family?.maritalStatus}</span></p> 
+                  {
+                    data?.family.marriageDate ? (<p>Marriage Date: <span className="font-bold">{data?.family?.marriageDate}</span></p>):(<></>)
+                  }
+                  {
+                    data?.family.spouseName ? (<p>Spouse Name: <span className="font-bold">{data?.family?.spouseName}</span></p>):(<></>)
+                  }
+                                    {
+                    data?.family.spouseDob ? (<p>Spouse Dob: <span className="font-bold">{data?.family?.spouseDob}</span></p>):(<></>)
+                  }
 
-              <div>
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Parent Info (Mother)</h3>
-                       <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Name: </h2>
-                          <p>{data?.family?.mother?.name}</p>
-                        </div>
+                  {
+                    data?.family.spouseOccupation ? (<p>Spouse Occupation: <span className="font-bold">{data?.family?.spouseOccupation}</span></p>):(<></>)
+                  }
+                  <div className="">
+                  <hr />
+                   <h1 className="font-bold text-center p-3 text-lg">Children</h1>
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Date of Birth: </h2>
-                          <p>{data?.family?.mother?.dateOfBirth}</p>
-                        </div>
+                    {data?.childDetail.length > 0 && (
+                      <div className="flex gap-2 flex-wrap">
+                        {data?.childDetail.map((ele, index) =>(
+                          <div className="min-w-[250px] rounded w-[300px] bg-gray-800 text-white p-2"> 
+                            <p className="text-xs text-red-500 ">Child {index+1}</p>
+                            <p>Name: {ele.childName}</p>
+                            <p>Gender: {ele.childGender}</p>
+                            <p>Dob: {ele.childDob}</p>
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Occupation: </h2>
-                          <p>{data?.family?.mother?.occupation}</p>
-                        </div>
+                            
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                        <div className='px-3 flex justify-between my-1 '>
-                          <h2 className='font-semibold'>Address: </h2>
-                          <p>{data?.family?.mother?.address}</p>
-                        </div>
+                <div className="flex justify-between gap-5">
+                  <div className="w-1/2 info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                    <h3 className="text-center font-bold text-green-950">FATHER</h3>
+                    
+                    <p>Name: <span className="font-bold">{data?.family?.father.name}</span></p> 
+                    <p>Date of Birth: <span className="font-bold">{data?.family?.father.dateOfBirth}</span></p> 
+                    <p>Occupation: <span className="font-bold">{data?.family?.father.occupation}</span></p> 
+                    <p>Address: <span className="font-bold">{data?.family?.father.address}</span></p> 
+                  </div>
 
-              </div>
+                  <div className="w-[50%] info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                    <h3 className="text-center font-bold text-green-950">MOTHER</h3>
+                    
+                    <p>Name: <span className="font-bold">{data?.family?.mother.name}</span></p> 
+                    <p>Date of Birth: <span className="font-bold">{data?.family?.mother.dateOfBirth}</span></p> 
+                    <p>Occupation: <span className="font-bold">{data?.family?.mother.occupation}</span></p> 
+                    <p>Address: <span className="font-bold">{data?.family?.mother.address}</span></p> 
+                  </div>
 
-              </div>
+                </div>
 
-                <h3 className='p-5 text-sm bg-green-200 font-bold'>Files</h3>
-              <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>              
+
+                <div className="flex justify-between gap-5">
+                  <div className="info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                    <h3 className="text-center font-bold text-green-950">FILES</h3>
+                    
+                    <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>             
                   {
                     data?.files?.map((ele, index) =>{
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg' || ele.ext === 'webp') {
                             return (
-                                    <a key={index} href={ele.url} style={{width: "100%", border: '1px solid'}} download>
+                                    <a key={index} href={ele.url} style={{width: "100%"}} download>
                                       <img style={{width:"100%"}} src={ele.url} alt="This is an image from the server"/>
                                     </a>
                                   )
-                        }else{
+                        }else if(ele.ext === 'pdf'){
                             return (
                                     <a key={index} style={{width: "100%", border: '1px solid'}} className="flex-1" href={ele.url} download>
                                        <embed 
@@ -351,16 +230,35 @@ export default async function Id({ params }) {
                                        />
                                     </a>
                                   )
+                        }else{
+                          return (
+                            <a key={index} className="flex-1" href={ele.url} download style={{width: "100%", border: '1px solid'}}>Click to Download File
+                               <iframe src={ele.url}></iframe>
+                            </a>
+                          )
                         }
 
                     })
                   }
                 
               </div>
+                  </div>
+
+                </div>
+
+
+
+
+                
+                
+                
+                
+
+
 
             </div>
-
-       </div>
-    </main>
-  )
+        </>
+    )
 }
+
+export default User;
