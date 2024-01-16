@@ -7,7 +7,7 @@ import { db } from "@/firebaseConfig";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const User = ({id}) =>{
+const User = () =>{
   const param = useParams();
   const [data, setData] = useState();
 
@@ -24,7 +24,7 @@ const User = ({id}) =>{
     }
       fetchData()
 
-    }, [])
+    }, [param.id])
     return(
         <>
             <div className="hidden md:block flex-1 h-auto w-2/3 shadow p-6 overflow-x-hidden">
@@ -171,7 +171,7 @@ const User = ({id}) =>{
                     {data?.childDetail.length > 0 && (
                       <div className="flex gap-2 flex-wrap">
                         {data?.childDetail.map((ele, index) =>(
-                          <div className="min-w-[250px] rounded w-[300px] bg-gray-800 text-white p-2"> 
+                          <div key={index} className="min-w-[250px] rounded w-[300px] bg-gray-800 text-white p-2"> 
                             <p className="text-xs text-red-500 ">Child {index+1}</p>
                             <p>Name: {ele.childName}</p>
                             <p>Gender: {ele.childGender}</p>
@@ -217,7 +217,7 @@ const User = ({id}) =>{
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg' || ele.ext === 'webp') {
                             return (
                                     <a key={index} href={ele.url} style={{width: "100%"}} download>
-                                      <img style={{width:"100%"}} src={ele.url} alt="This is an image from the server"/>
+                                      <Image style={{width:"100%"}} src={ele.url} alt="This is an image from the server"/>
                                     </a>
                                   )
                         }else if(ele.ext === 'pdf'){
