@@ -1,7 +1,7 @@
 "use client"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebaseConfig"; 
-
+import Image from "next/image";
 
 
 import { useParams } from "next/navigation";
@@ -117,6 +117,35 @@ const User = () =>{
                   
                 </div>
 
+
+                <div className="info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
+                  <h3 className="text-center font-bold text-green-950">Education</h3>
+                  {
+                    data?.education.length > 0 ? (
+                      <div className="flex justify-between gap-5">
+                        {
+                          data?.education.map((ele, index) =>(
+                            <div className="mb-3 w-1/2 bg-slate-50" key={ele.id}>
+                               <p className="bg-green-200 w-max p-1 text-xs">Education {index+1}</p>
+                               <div className="p-2">
+                                <p>School: <span className="font-bold">{ele?.school}</span></p> 
+                                <p>Certification: <span className="font-bold">{ele?.certification}</span></p> 
+                                <p>Course: <span className="font-bold">{ele?.course}</span></p> 
+                                <p>From: <span className="font-bold">{ele?.from}</span></p> 
+                                <p>To: <span className="font-bold">{ele?.to}</span></p> 
+                               </div>
+                            </div>
+                          ))
+                        }
+
+                      </div>
+                    ):(
+                      <h1 className="text-center">No Previous Education</h1>
+                    )
+                  }
+                  
+                </div>
+
                 <div className="info text-sm mt-4 text-slate-800 bg-slate-100 p-3 min-h-[100px]">
                   <h3 className="text-center font-bold text-green-950">WORK HISTORY</h3>
                   {
@@ -217,7 +246,7 @@ const User = () =>{
                         if(ele.ext === 'png' || ele.ext === 'jpg' || ele.ext === 'jpeg' || ele.ext === 'webp') {
                             return (
                                     <a key={index} href={ele.url} style={{width: "100%"}} download>
-                                      <Image style={{width:"100%"}} src={ele.url} alt="This is an image from the server"/>
+                                      <img href={ele.url} style={{width: "100%"}} src={ele.url} alt="This is an image from the server"/>
                                     </a>
                                   )
                         }else if(ele.ext === 'pdf'){

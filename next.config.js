@@ -8,6 +8,18 @@ const nextConfig = {
       register: true,
       skipWaiting: true,
       sw: 'service-worker.js',
+ 
+      images: {
+        formats: ["image/avif", "image/webp", "image/png", "image/jpg"],
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "firebasestorage.googleapis.com",
+            port: "",
+            pathname: "/**",
+          },
+        ],
+      }
     })
 }
 
